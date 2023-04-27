@@ -2,8 +2,10 @@
 session_start();
 
 if (isset($_SESSION['username'])) {
-    header('location:welcome.php');
-    exit;
+    if($_SESSION['username']==$_POST['username']){
+        header('location:welcome.php');
+        exit;
+    }
 }
 require_once "config.php";
 
@@ -18,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $password = $_POST['password'];
     }
     if (empty($err)) {
-        $sql = "SELECT id,username,password FROM users WHERE username = ?";
+        $sql = "SELECT id,username,password FROM user WHERE username = ?";
         $stmt = mysqli_prepare($link, $sql);
         if ($stmt) {
             mysqli_stmt_bind_param($stmt, 's', $param_username);
