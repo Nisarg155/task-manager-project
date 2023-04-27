@@ -1,3 +1,48 @@
+<?php
+session_start();
+
+if (isset($_SESSION['username'])) {
+    header('location:welcome.php');
+    exit;
+}
+require_once "config.php";
+
+$username = $password = "";
+$err = "";
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (empty(trim($_POST['username'])) || empty(trim($_POST['password']))) {
+        $err = "User or Password can't be empty";
+    } else {
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+    }
+    if (empty($err)) {
+        $sql = "SELECT id,username,password FROM users WHERE username = ?";
+        $stmt = mysqli_prepare($link, $sql);
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, 's', $param_username);
+            $param_username = $_POST['username'];
+            if (mysqli_stmt_execute($stmt)) {
+                mysqli_stmt_store_result($stmt);
+                if (mysqli_stmt_num_rows($stmt) == 1) {
+                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
+                    if (mysqli_stmt_fetch($stmt)) {
+                        if (password_verify($password, $hashed_password)) {
+                            session_start();
+                            $_SESSION["username"] = $username;
+                            $_SESSION["id"] = $id;
+                            $_SESSION["loggedin"] = true;
+                            header('location: welcome.php');
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+?>
 <!doctype html>
 <html lang="en">
 
@@ -35,55 +80,28 @@
             </div>
         </div>
     </nav>
-
+    <style>
+        .login_form {
+            text-align: center;
+            display: inline;
+        }
+    </style>
     <div class="container">
-        <h1>Login Yourself</h1>
-        <form>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="inputEmail4">Email</label>
-                    <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
-                </div>
+        <h1>Please Login here:</h1>
+        <form class="login_form" action="" method="post">
+            <div class="form-group col-md-5">
+                <label for="exampleInputusername">Username</label>
+                <input type="username" name="username" class="form-control" id="exampleInputusername" aria-describedby="emailHelp" placeholder="Enter username or Email">
             </div>
-
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="inputAddress">First Name</label>
-                    <input type="text" class="form-control" id="FIRST-NAME">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="inputAddress2">Last Name</label>
-                    <input type="text" class="form-control" id="LAST-NAME">
-                </div>
+            <div class="form-group col-md-5">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="phone-number">Phone Number</label>
-                    <input type="tel" class="form-control" id="phone-number" placeholder="+91">
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="country">Country</label>
-                    <input type="text" class="form-control" id="country" placeholder="India">
-                </div>
+            <div class="form-group form-check col-md-5">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Check me out</label>
             </div>
-            <div class="form-group col-md-6">
-                    <label for="inputPassword4">Password</label>
-                    <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="inputPassword4">Confirm Password</label>
-                    <input type="password" class="form-control" id="inputPassword4" placeholder="Confirm Password">
-                </div>
-            <div class="form-group">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="gridCheck">
-                    <label class="form-check-label" for="gridCheck">
-                        Check me out
-                    </label>
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Sign up</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
     <!-- Optional JavaScript; choose one of the two! -->
