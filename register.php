@@ -1,3 +1,102 @@
+
+<?php
+
+require_once"config.php";
+
+$username = $password  = $confirm_password = "";
+$username_err = $password_err  = $confirm_password_err = "";
+
+if($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
+{
+    // * CHECK IF USERNAME IS EMPTY
+    if(empty(trim($_POST['username'])))
+    {
+        $username_err = "USERNAME CANNOT BE BLANK";
+    }
+    else{
+        $sql = "SELECT id FROM users WHERE username = ?";
+        $stmt = mysqli_prepare($link,$sql);
+
+        if($stmt)
+        {
+            mysqli_stmt_bind_param($stmt,"s",$param_username);
+            
+            // * SET THE VALUE OF PARAMETER USERNAME
+            $param_username = trim($_POST['username']);
+
+            //* execute the code
+
+            if(mysqli_stmt_execute($stmt))
+            {
+                mysqli_stmt_store_result($stmt);
+                if(mysqli_stmt_num_rows($stmt) == 1)
+                {
+                    $username_err = "   THIS USERNAME IS ALREADY TAKEN ";
+                }
+                else{
+                    $username = trim($_POST['username']);
+                }
+            }
+        }
+        else{
+            echo "something went wrong";
+        }
+    }
+
+    mysqli_stmt_close($stmt);
+
+
+
+
+if(empty(trim($_POST['password'])))     //todo  CHECK THE PASSWORD
+{
+    $password_err = "PASSWORD CANNOT BE BLANK";
+}
+else if(strlen(trim($_POST['password'])) < 8){
+
+    $password_err = "PASSWORD LENGTH MUST BE GREATER THAN 8";
+}
+else{
+    $password = trim($_POST['password']);
+}
+
+
+if(trim($_POST['password']) != trim($_POST['confirm_password'])) //TODO CHECK CONFIRM PASSWORD
+{
+    $confirm_password_err = "PASSWORD DOES NOT MATCH";
+}
+
+if(empty($username_err) && empty($password_err) && empty($confirm_password_err))
+{
+    $sql = "INSERT INTO user (username,password) VALUES (?,?)";
+    $stmt = mysqli_prepare($link,$sql);
+    if($stmt)
+    {
+        mysqli_stmt_bind_param($stmt,"ss",$param_username,$param_password);
+        $param_username = $username;
+        $param_password = password_hash($password,PASSWORD_DEFAULT);
+
+        if(mysqli_stmt_execute($stmt))
+        {
+            header("location: login.php");
+        }
+        else{
+            echo "something went wrong ...cannot redirect!!";
+        }
+    } 
+    mysqli_stmt_close($stmt);
+}
+
+mysqli_close($link);
+
+}
+
+?>
+
+
+
+
+
 <!doctype html>
 <html lang="en">
 
@@ -38,7 +137,7 @@
 
     <div class="container">
         <h1>Register Yourself</h1>
-        <form>
+        <form action="" method="post">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="inputEmail4">Email</label>
@@ -48,12 +147,8 @@
 
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <label for="inputAddress">First Name</label>
-                    <input type="text" class="form-control" id="FIRST-NAME">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="inputAddress2">Last Name</label>
-                    <input type="text" class="form-control" id="LAST-NAME">
+                    <label for="username">User Name</label>
+                    <input type="text" class="form-control" name="username" id="username">
                 </div>
             </div>
             <div class="form-row">
@@ -67,12 +162,12 @@
                 </div>
             </div>
             <div class="form-group col-md-6">
-                    <label for="inputPassword4">Password</label>
-                    <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+                    <label for="inputPassword">Password</label>
+                    <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="inputPassword4">Confirm Password</label>
-                    <input type="password" class="form-control" id="inputPassword4" placeholder="Confirm Password">
+                    <input type="password" class="form-control" name="confirm_password"  id="inputPassword4" placeholder="Confirm Password">
                 </div>
             <div class="form-group">
                 <div class="form-check">
