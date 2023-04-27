@@ -22,7 +22,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
         {
             mysqli_stmt_bind_param($stmt,"s",$param_Email_id);
             $param_Email_id = trim($_POST['Email_id']);
-
             if(mysqli_stmt_execute($stmt))
             {
                 mysqli_stmt_store_result($stmt);
@@ -31,7 +30,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
                     $Email_id_err = "EMAIL ID IS ALREADY TAKEN";
                 }
                 else{
-                    $Email_id = $param_Email_id;
+                    $Email_id = trim($_POST['Email_id']);
                 }
             }
             else{
@@ -41,9 +40,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
         else{
             echo "oops something went wrong";
         }
+        mysqli_stmt_close($stmt);
     }
 
-    mysqli_stmt_close($stmt);
 
 
 
@@ -81,9 +80,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
         else{
             echo "something went wrong";
         }
+        mysqli_stmt_close($stmt);
     }
 
-    mysqli_stmt_close($stmt);
 
 
 
@@ -106,15 +105,16 @@ if(trim($_POST['password']) != trim($_POST['confirm_password'])) //TODO CHECK CO
     $confirm_password_err = "PASSWORD DOES NOT MATCH";
 }
 
-if(empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($Email_id))
+if(empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($Email_id_err))
 {
     $sql = "INSERT INTO user (username,password,Email_id) VALUES (?,?,?)";
     $stmt = mysqli_prepare($link,$sql);
     if($stmt)
     {
-        mysqli_stmt_bind_param($stmt,"sss",$param_username,$param_password,$Email_id);
+        mysqli_stmt_bind_param($stmt,"sss",$param_username,$param_password,$param_Email_id);
         $param_username = $username;
         $param_password = password_hash($password,PASSWORD_DEFAULT);
+        $param_Email_id = $Email_id;
         if(mysqli_stmt_execute($stmt))
         {
             header("location: login.php");
