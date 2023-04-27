@@ -3,18 +3,58 @@
 
 require_once"config.php";
 
-$username = $password  = $confirm_password = "";
-$username_err = $password_err  = $confirm_password_err = "";
+$Email_id = $username = $password  = $confirm_password = "";
+$Email_id_err = $username_err = $password_err  = $confirm_password_err = "";
 
 if($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
 {
+
+    //* CHECK EMAIL
+    if(empty(trim($_POST['Email_id'])))
+    {
+        $Email_id_err = "EMAIL ID CANT BE EMPTY";
+    }
+    else{
+        $sql = "SELECT id FROM user WHERE Email_id = ? ";
+        $stmt = mysqli_prepare($link,$sql);
+
+        if($stmt)
+        {
+            mysqli_stmt_bind_param($stmt,"s",$param_Email_id);
+            $param_Email_id = trim($_POST['Email_id']);
+
+            if(mysqli_stmt_execute($stmt))
+            {
+                mysqli_stmt_store_result($stmt);
+                if(mysqli_stmt_num_rows($stmt) == 1)
+                {
+                    $Email_id_err = "EMAIL ID IS ALREADY TAKEN";
+                }
+                else{
+                    $Email_id = $param_Email_id;
+                }
+            }
+            else{
+                echo "oops something went wrong";
+            }
+        }
+        else{
+            echo "oops something went wrong";
+        }
+    }
+
+    mysqli_stmt_close($stmt);
+
+
+
+
     // * CHECK IF USERNAME IS EMPTY
     if(empty(trim($_POST['username'])))
     {
         $username_err = "USERNAME CANNOT BE BLANK";
     }
     else{
-        $sql = "SELECT id FROM users WHERE username = ?";
+        $sql = "SELECT id FROM user WHERE username = ?";
         $stmt = mysqli_prepare($link,$sql);
 
         if($stmt)
@@ -31,7 +71,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
                 mysqli_stmt_store_result($stmt);
                 if(mysqli_stmt_num_rows($stmt) == 1)
                 {
-                    $username_err = "   THIS USERNAME IS ALREADY TAKEN ";
+                    $username_err = "THIS USERNAME IS ALREADY TAKEN ";
                 }
                 else{
                     $username = trim($_POST['username']);
@@ -66,16 +106,15 @@ if(trim($_POST['password']) != trim($_POST['confirm_password'])) //TODO CHECK CO
     $confirm_password_err = "PASSWORD DOES NOT MATCH";
 }
 
-if(empty($username_err) && empty($password_err) && empty($confirm_password_err))
+if(empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($Email_id))
 {
-    $sql = "INSERT INTO user (username,password) VALUES (?,?)";
+    $sql = "INSERT INTO user (username,password,Email_id) VALUES (?,?,?)";
     $stmt = mysqli_prepare($link,$sql);
     if($stmt)
     {
-        mysqli_stmt_bind_param($stmt,"ss",$param_username,$param_password);
+        mysqli_stmt_bind_param($stmt,"sss",$param_username,$param_password,$Email_id);
         $param_username = $username;
         $param_password = password_hash($password,PASSWORD_DEFAULT);
-
         if(mysqli_stmt_execute($stmt))
         {
             header("location: login.php");
@@ -141,7 +180,7 @@ mysqli_close($link);
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="inputEmail4">Email</label>
-                    <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+                    <input type="email" class="form-control" id="inputEmail4" name="Email_id"  placeholder="Email">
                 </div>
             </div>
 
