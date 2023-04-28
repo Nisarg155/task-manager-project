@@ -8,6 +8,7 @@ if (isset($_SESSION['username'])) {
     }
 }
 require_once "config.php";
+
 $username = $password = "";
 $err = "";
 
@@ -19,10 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $password = $_POST['password'];
     }
     if (empty($err)) {
-        $sql = "SELECT id,username,password FROM user WHERE username = ?";
+        $sql = "SELECT id,username,password FROM user WHERE (username = ? OR Email_id = ?)";
         $stmt = mysqli_prepare($link, $sql);
         if ($stmt) {
-            mysqli_stmt_bind_param($stmt, 's', $param_username);
+            mysqli_stmt_bind_param($stmt, 'ss', $param_username,$param_username);
             $param_username = $_POST['username'];
             if (mysqli_stmt_execute($stmt)) {
                 mysqli_stmt_store_result($stmt);
