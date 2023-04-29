@@ -28,7 +28,30 @@ input[type="text"] {
     font-size: 18px;
     cursor: pointer;
 }
- 
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+  }
+  .topright {
+    position: absolute;
+    top: 18px;
+    right: 16px;
+    font-size: 18px;
+}
+  .navbar a {
+    color: #fff;
+    text-decoration: none;
+    margin-right: 10px;
+  }
+  
+  .navbar a:hover {
+    text-decoration: underline;
+  }
 ul {
     list-style: none;
     padding: 0;
