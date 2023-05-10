@@ -8,6 +8,10 @@ if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !==true)
 }
 
 
+
+$session_id = $_SESSION['id'];
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -95,7 +99,7 @@ if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !==true)
             <a href="login.php">Login</a>
             <a href="logout.php">logout</a>
             <div class="topright">
-                <a href=""><?php echo "Welcome " . $_SESSION['username'] ?></a>
+                <a href=""><?php echo "Welcome " . $_SESSION['id'] ?></a>
             </div>
         </nav>
     </div>
@@ -106,6 +110,7 @@ if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !==true)
         <ul id="todo-list"></ul>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="welcome.js"></script>
 </body>
 
