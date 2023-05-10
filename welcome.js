@@ -9,6 +9,7 @@ function addTask() {
         return;
     }
 
+    
     const newTask = document.createElement("li");
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
@@ -26,7 +27,7 @@ function addTask() {
     newTask.appendChild(text);
     newTask.appendChild(deleteBtn);
     todoList.appendChild(newTask);
-
+    
     newTaskInput.value = "";
 }
 
