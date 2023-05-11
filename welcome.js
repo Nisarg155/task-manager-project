@@ -2,14 +2,23 @@ const newTaskInput = document.getElementById("new-task");
 const addBtn = document.getElementById("add-btn");
 const todoList = document.getElementById("todo-list");
 const sessionID  = "<?php echo $session_id; ?>";
-// Fetch the tasks from the database and display them in the HTML
-$.get("get_tasks.php", function(data) {
-    const tasks = JSON.parse(data);
-    tasks.forEach(function(task) {
-        const newTask = createTaskElement(task.id, task.text, task.status);
-        todoList.appendChild(newTask);
+
+function fetchTasks() {
+    // Send an AJAX request to get the tasks from the database
+    $.get("get_task.php", function(data) {
+        if (data) {
+            const tasks = JSON.parse(data);
+            tasks.forEach(function(task) {
+                const newTask = createTaskElement(task.id, task.text, task.status);
+                todoList.appendChild(newTask);
+            });
+        }
     });
-});
+}
+
+// Call the fetchTasks function to display tasks on page load or refresh
+fetchTasks();
+
 
 function addTask() {
     const newTaskText = newTaskInput.value;

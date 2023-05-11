@@ -1,38 +1,47 @@
 <?php
+session_start();
 
-// Database configuration
-$dbHost = "localhost";
-$dbUser = "root";
-$dbPass = "";
-$dbName = "login";
-
-// Create database connection
-$conn = new mysqli($dbHost, $dbUser, $dbPass, $dbName);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("location: login.php");
+    exit;
 }
 
-// Get tasks from the database
-$sql = "SELECT task_id, task, date, task_status FROM user_task WHERE id = ? ";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ii", $_SESSION['id'], $task_status);
-$task_status = 0; // get only the tasks with task_status = 0
-$stmt->execute();
-$result = $stmt->get_result();
+if (isset($_SESSION['id'])) {
+    $user_id = $_SESSION['id'];
 
-// Fetch tasks and create an array of tasks
-$tasks = array();
-while ($row = $result->fetch_assoc()) {
-    $tasks[] = $row;
+    // Connect to the database
+    $conn = mysqli_connect("localhost", "root", "", "login");
+
+    // Check connection
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    // Prepare and execute the SQL statement to get the tasks
+    $sql = "SELECT * FROM user_task WHERE id = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $user_id);
+    mysqli_stmt_execute($stmt);
+
+    // Get the result
+    $result = mysqli_stmt_get_result($stmt);
+
+    // Fetch tasks from the result
+    $tasks = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $task = array(
+            'id' => $row['task_id'],
+            'text' => $row['task'],
+            'status' => $row['task_status']
+        );
+        $tasks[] = $task;
+    }
+
+    // Close the statement and database connection
+    mysqli_stmt_close($stmt);
+    mysqli_close($conn);
+
+    // Return the tasks as JSON
+    echo json_encode($tasks);
 }
-
-// Convert the tasks array to JSON and return
-echo json_encode($tasks);
-
-// Close database connection
-$stmt->close();
-$conn->close();
-
 ?>
