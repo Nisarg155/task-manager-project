@@ -9,8 +9,6 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
 
 $session_id = $_SESSION['id'];
-
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -27,7 +25,7 @@ $session_id = $_SESSION['id'];
             <a href="login.php">Login</a>
             <a href="logout.php">logout</a>
             <div class="topright">
-                <a href=""><?php echo "Welcome " . $_SESSION['id'] ?></a>
+                <a href=""><?php echo "Welcome " . $_SESSION['username'] ?></a>
             </div>
         </nav>
     </div>

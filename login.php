@@ -2,7 +2,7 @@
 session_start();
 
 if (isset($_SESSION['username'])) {
-    if($_SESSION['username']==$_POST['username']){
+    if ($_SESSION['username'] == $_POST['username']) {
         header('location:welcome.php');
         exit;
     }
@@ -10,20 +10,25 @@ if (isset($_SESSION['username'])) {
 require_once "config.php";
 
 $username = $password = "";
-$err = "";
+$err1 = $err2 = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (empty(trim($_POST['username'])) || empty(trim($_POST['password']))) {
-        $err = "User or Password can't be empty";
+    if (empty(trim($_POST['username']))) {
+        $err1 = "User or email can't be empty";
+        $err1_class = "bg-warning"; 
+    }
+    if (empty(trim($_POST['password']))) {
+        $err2 = "Password can't be empty";
+        $err2_class = "bg-warning"; 
     } else {
         $username = $_POST['username'];
         $password = $_POST['password'];
     }
-    if (empty($err)) {
-        $sql = "SELECT id,username,password FROM user WHERE (username = ? OR Email_id = ?)";
+    if (empty($err1) && empty($err2)) {
+        $sql = "SELECT id, username, password FROM user WHERE (username = ? OR Email_id = ?)";
         $stmt = mysqli_prepare($link, $sql);
         if ($stmt) {
-            mysqli_stmt_bind_param($stmt, 'ss', $param_username,$param_username);
+            mysqli_stmt_bind_param($stmt, 'ss', $param_username, $param_username);
             $param_username = $_POST['username'];
             if (mysqli_stmt_execute($stmt)) {
                 mysqli_stmt_store_result($stmt);
@@ -36,6 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $_SESSION["id"] = $id;
                             $_SESSION["loggedin"] = true;
                             header('location: welcome.php');
+                        } else {
+                            $err2 = "Password doesn't match";
+                            $err2_class = "bg-dark"; // Add this line
                         }
                     }
                 }
@@ -94,15 +102,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="form-group col-md-5">
                 <label for="exampleInputusername">Username</label>
                 <input type="username" name="username" class="form-control" id="exampleInputusername" aria-describedby="emailHelp" placeholder="Enter username or Email">
+                <small id="err1" class="<?php echo $err1_class ?? '' ?>"><?php echo $err1 ?? '' ?></small>
             </div>
             <div class="form-group col-md-5">
                 <label for="exampleInputPassword1">Password</label>
                 <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                <small id="err2" class="<?php echo $err2_class ?? '' ?>"><?php echo $err2 ?? '' ?></small>
             </div>
-            <div class="form-group form-check col-md-5">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-            </div>
+            <br>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
@@ -112,10 +119,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
+   
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    -->
 </body>
 
 </html>
