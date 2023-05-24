@@ -18,19 +18,20 @@ $session_id = $_SESSION['id'];
     <link rel="stylesheet" href="welcome.css">
 </head>
 
-<body>
-    <div class="navbar">
+<body style="background-image: url(images/welcome.jpg);">
+    <div class="navbar" >
         <nav>
             <a href="register.php">Register</a>
             <a href="login.php">Login</a>
             <a href="logout.php">logout</a>
             <div class="topright">
+                <a href=""><img src="images/user.png" style="height:30px"></a>
                 <a href=""><?php echo "Welcome " . $_SESSION['username'] ?></a>
             </div>
         </nav>
     </div>
     <div class="todo-container">
-        <h1>To-Do List</h1>
+        <h1 style="color:white;">To-Do List</h1>
         <input type="text" id="new-task" placeholder="Add a new task...">
         <button class="buttons" id="add-btn">Add</button>
         <ul id="todo-list"></ul>
@@ -40,4 +41,76 @@ $session_id = $_SESSION['id'];
     <script src="welcome.js"></script>
 </body>
 
+
+
+<style>
+    body{
+        margin: 0px;
+        padding: 0px;
+
+    }
+    .navbar{
+        background-color: #333;
+        padding: 20px;
+        font-size: 20px;
+    }
+
+
+    .topright {
+	
+	top: 15px;
+	right: 16px;
+	font-size: 20px;
+}
+
+    .buttons {
+	padding: 10px 20px;
+	background-color: #008cba;
+	color: #fff;
+	border: none;
+	border-radius: 20px;
+	font-size: 18px;
+	cursor: pointer;
+}
+    ul {
+	list-style: none;
+	padding: 0;
+}
+
+
+li {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 20px;
+	padding: 10px;
+	border-radius: 20px;
+	background-color: #1D267D; 
+	margin-bottom: 10px;
+    color: white;
+}
+
+li input[type="checkbox"] {
+	margin-right: 10px;
+}
+
+li.completed {
+	background-color: #0C134F;
+}
+li.completed span{
+    text-decoration: line-through;
+}
+
+
+
+.delete-btn {
+	background-color: #f44336;
+	color: #fff;
+	border: none;
+	padding: 5px 10px;
+	border-radius: 20px;
+	font-size: 16px;
+	cursor: pointer;
+}
+</style>
 </html>

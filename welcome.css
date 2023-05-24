@@ -1,87 +1,87 @@
 .todo-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
+	max-width: 600px;
+	margin: 0 auto;
+	padding: 20px;
 }
 
 h1 {
-    font-size: 36px;
-    text-align: center;
+	font-size: 36px;
+	text-align: center;
+    color: white;
 }
 
 input[type="text"] {
-    width: 80%;
-    padding: 10px;
-    font-size: 18px;
-    border-radius: 5px;
-    border: none;
-    margin-bottom: 10px;
-    border: 2px solid #0b0909;
+	width: 80%;
+	padding: 10px;
+	font-size: 18px;
+	border-radius: 5px;
+	border: none;
+	margin-bottom: 10px;
+	border: 2px solid #0b0909;
 }
 
 .buttons {
-    padding: 10px 20px;
-    background-color: #008CBA;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 18px;
-    cursor: pointer;
+	padding: 10px 20px;
+	background-color: #008cba;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	font-size: 18px;
+	cursor: pointer;
 }
 
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-  }
-  .topright {
-    position: absolute;
-    top: 18px;
-    right: 16px;
-    font-size: 18px;
+.navbar nav{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #333;
+	color: #fff;
 }
-  .navbar a {
-    color: #fff;
-    text-decoration: none;
-    margin-right: 10px;
-  }
-  
-  .navbar a:hover {
-    text-decoration: underline;
-  }
+.topright {
+	position: absolute;
+	top: 18px;
+	right: 16px;
+	font-size: 18px;
+}
+.navbar a {
+	color: #fff;
+	text-decoration: none;
+	margin-right: 10px;
+}
+
+.navbar a:hover {
+	text-decoration: underline;
+}
 ul {
-    list-style: none;
-    padding: 0;
+	list-style: none;
+	padding: 0;
 }
 
 li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 20px;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    margin-bottom: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 20px;
+	padding: 10px;
+	border-radius: 10px;
+	background-color: #f2f2f2;
+	margin-bottom: 10px;
 }
 
 li input[type="checkbox"] {
-    margin-right: 10px;
+	margin-right: 10px;
 }
 
 li.completed {
-    background-color: #e6e6e6;
+	background-color: #e6e6e6;
 }
 
 .delete-btn {
-    background-color: #f44336;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
+	background-color: #f44336;
+	color: #fff;
+	border: none;
+	padding: 5px 10px;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
 }
