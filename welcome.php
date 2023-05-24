@@ -24,6 +24,7 @@ $session_id = $_SESSION['id'];
             <a href="register.php">Register</a>
             <a href="login.php">Login</a>
             <a href="logout.php">logout</a>
+            <a href="contact.html">Contact us</a>
             <div class="topright">
                 <a href=""><img src="images/user.png" style="height:30px"></a>
                 <a href=""><?php echo "Welcome " . $_SESSION['username'] ?></a>
