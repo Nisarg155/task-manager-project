@@ -1,20 +1,23 @@
 <?php
 session_start();
 
-if (isset($_SESSION['username'])) {
-    if ($_SESSION['username'] == $_POST['username']) {
-        header('location:welcome.php');
-        exit;
-    }
-}
+// if (isset($_SESSION['username'])) {
+//     if ($_SESSION['username'] == $_POST['username']) {
+//         header('location:welcome.php');
+//         exit;
+//     }
+// }
 require_once "config.php";
 
 $username = $password = "";
 $err1 = $err2 = "";
+$captcha_err = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    $captcha = $_POST['captcha'];
     if (empty(trim($_POST['username']))) {
-        $err1 = "User or email can't be empty";
+        $err1 = "Username can't be empty";
         $err1_class = "bg-warning"; 
     }
     if (empty(trim($_POST['password']))) {
@@ -24,7 +27,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $username = $_POST['username'];
         $password = $_POST['password'];
     }
-    if (empty($err1) && empty($err2)) {
+
+    if(isset($password) && isset($username))
+    {
+        if(empty($captcha))
+        {
+            $captcha_err = "Captcha can't be empty";
+            $err3_class = "bg-warning";
+        }
+        else if($captcha !== $_SESSION['CAPTCHA_CODE'])
+        {
+            $captcha_err = "Invalid Captcha";
+            $err3_class = "bg-warning";
+        }
+    }
+    if (empty($err1) && empty($err2) && empty($captcha_err)) {
         $sql = "SELECT id, username, password FROM user WHERE (username = ? OR Email_id = ?)";
         $stmt = mysqli_prepare($link, $sql);
         if ($stmt) {
@@ -43,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             header('location: welcome.php');
                         } else {
                             $err2 = "Password doesn't match";
-                            $err2_class = "bg-dark"; // Add this line
+                            $err2_class = "bg-warning"; // Add this line
                         }
                     }
                 }
@@ -67,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Login Page</title>
 </head>
 
-<body>
+<body style="background-image: url(images/login.jpg); color:white;">
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
@@ -110,9 +127,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <small id="err2" class="<?php echo $err2_class ?? '' ?>"><?php echo $err2 ?? '' ?></small>
             </div>
             <br>
+            <br>
+            <br>
+
+            <div class="form-group col-md-5">
+                <label for="captcha">Enter Captcha</label>
+                <input type="text" name="captcha" id="captcha" class="form-control" placeholder="captcha">
+                <small id="err3" class="<?php echo $err3_class ?? '' ?>"><?php echo $captcha_err ?? '' ?></small>
+                
+            </div>
+            <br>
+            <div class="form-group col-md-5" >
+                <label for="captcha-code">Captcha Code</label>
+                <img src="captcha.php" name="captcha-code" id="captcha-code">
+            </div>
+            <br>
             <button type="submit" class="btn btn-primary">Submit</button>
+            &nbsp;&nbsp;
+        <input type="reset" id="reset" onclick="resetcaptcha()" class="btn btn-primary">
         </form>
     </div>
+    <script>
+        function resetcaptcha() {
+            var captchaImage = document.getElementById('captcha-code');
+            captchaImage.src = 'captcha.php';
+        }
+    </script>
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
