@@ -151,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
     <title>Register Page</title>
 </head>
 
-<body>
+<body style="background-image: url(images/login.jpg); color:white;">
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
                     <small id="Email_id" class="<?php echo $Email_id_class ?? '' ?>"><?php echo $Email_id_err ?? '' ?></small>
                 </div>
             </div>
-
+            <br>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="username">User Name</label>
@@ -193,12 +193,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
                     <small id="username" class="<?php echo $username_class ?? '' ?>"><?php echo $username_err ?? '' ?></small>
                 </div>
             </div>
+            <br>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="phone-number">Phone Number</label>
                     <input type="tel" class="form-control" name="phone_no" id="phone-number" placeholder="+91">
                     <small id="phone_no" class="<?php echo $phone_no_err_class ?? '' ?>"><?php echo $phone_no_err ?? '' ?></small>
                 </div>
+                <br>
                 <div class="form-group col-md-4">
                     <label for="country">Country:</label><br>
                     <select name="country" >
@@ -236,11 +238,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
                     <small id="country" class="<?php echo $country_err_class ?? '' ?>"><?php echo $country_err ?? '' ?></small>
                 </div>
             </div>
+            <br>
             <div class="form-group col-md-6">
                 <label for="inputPassword">Password</label>
                 <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password">
                 <small id="password" class="<?php echo $password_err_class ?? '' ?>"><?php echo $password_err ?? '' ?></small>
             </div>
+            <br>
             <div class="form-group col-md-6">
                 <label for="inputPassword4">Confirm Password</label>
                 <input type="password" class="form-control" name="confirm_password" id="inputPassword4" placeholder="Confirm Password">
