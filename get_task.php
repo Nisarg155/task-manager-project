@@ -18,7 +18,7 @@ if (isset($_SESSION['id'])) {
     }
 
     // Prepare and execute the SQL statement to get the tasks
-    $sql = "SELECT * FROM user_task WHERE id = ? ORDER BY date DESC";
+    $sql = "SELECT * FROM user_task WHERE id = ? ORDER BY task_status ASC";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "i", $user_id);
     mysqli_stmt_execute($stmt);
