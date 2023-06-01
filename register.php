@@ -3,7 +3,7 @@
 require_once "config.php";
 
 $Email_id = $username = $password  = $confirm_password = "";
-$Email_id_err = $username_err = $password_err  = $confirm_password_err = $phone_no_err = $country_err = "";
+$Email_id_err = $username_err = $password_err  = $confirm_password_err = $phone_no_err = $country_err = $recovery_err = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
 {
@@ -110,14 +110,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
         $confirm_password_err_class = "bg-warning";
     }
 
-    if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($Email_id_err)) {
-        $sql = "INSERT INTO user (username,password,Email_id) VALUES (?,?,?)";
+    if(empty(trim($_POST['recoveryquestion'])))
+    {
+        $recovery_err = "Answer of recovery question can't be empty";
+        $recovery_err_class = "bg-warning";
+    }
+
+    if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($Email_id_err) && empty($recovery_err)) {
+        $sql = "INSERT INTO user (username,password,Email_id,recovery) VALUES (?,?,?,?)";
         $stmt = mysqli_prepare($link, $sql);
         if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_password, $param_Email_id);
+            mysqli_stmt_bind_param($stmt, "ssss", $param_username, $param_password, $param_Email_id , $param_recovery);
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT);
             $param_Email_id = $Email_id;
+            $param_recovery = trim($_POST['recoveryquestion']);
             if (mysqli_stmt_execute($stmt)) {
                 if((empty($phone_no_err)) && (empty($country_err)))
                 header("location: login.php");
@@ -249,6 +256,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
                 <label for="inputPassword4">Confirm Password</label>
                 <input type="password" class="form-control" name="confirm_password" id="inputPassword4" placeholder="Confirm Password">
                 <small id="password" class="<?php echo $confirm_password_err_class ?? '' ?>"><?php echo $confirm_password_err ?? '' ?></small>
+            </div>
+            <br>
+            <div class="form-group col-md-6">
+                <label for="recoveryquestion">Recovery Question:-</label>
+                <input type="text" class="form-control" name="recoveryquestion" id="recovery" placeholder="">
+                <small id="recoveryquestion" class="<?php echo $recovery_err_class ?? '' ?>"><?php echo $recovery_err ?? '' ?></small>
             </div>
             <br>
             <button type="submit" class="btn btn-primary">Sign up</button>

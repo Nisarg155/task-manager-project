@@ -145,6 +145,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button type="submit" class="btn btn-primary">Submit</button>
             &nbsp;&nbsp;
         <input type="reset" id="reset" onclick="resetcaptcha()" class="btn btn-primary">
+        &nbsp;
+        <a href="forgot.php" class="btn btn-primary ">Forgot Password</a>
         </form>
     </div>
     <script>
