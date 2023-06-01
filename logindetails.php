@@ -202,7 +202,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
                     <lable id="info-lable" for="Email">Email Id</lable>
                     <input id="Email" name="Email" type="email" class="info_input" value="<?php echo $email ?>">
                     <small id="err2" class="<?php echo $err2_class ?? '' ?>"><?php echo $err2 ?? '' ?></small><br>
-                    <button id="update_button">Update</button>
+                    <button id="update_button" class="update_button">Update</button>
+                    <br>
+                    <a href="passworddetails.php" id="update_password">Update password</a>
                 </div>
             </form>
         </div>
