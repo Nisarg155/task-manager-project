@@ -159,7 +159,7 @@ function sendEmail($email, $token) {
     $mail->isSMTP();
     $mail->SMTPAuth = true;
     $mail->Username = "arshgangani18@gmail.com";
-    $mail->Password = "xvxkourlzfqwzytc";
+    $mail->Password = "password";
     $mail->SMTPSecure = "ssl";
     $mail->Host = "smtp.gmail.com";
     $mail->Port = 465;
