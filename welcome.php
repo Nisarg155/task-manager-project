@@ -19,7 +19,7 @@ $session_id = $_SESSION['id'];
     <link rel="stylesheet" href="welcome.css">
 </head>
 
-<body style="background-image: url(images/welcome.jpg);">
+<body>
     <div class="navbar" >
         <nav>
             <a href="logout.php">logout</a>
@@ -45,6 +45,8 @@ $session_id = $_SESSION['id'];
 
 <style>
     body{
+        background-image: url(images/welcome.jpg);
+        background-size:cover;
         margin: 0px;
         padding: 0px;
 

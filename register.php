@@ -1,13 +1,16 @@
 <?php
 
 require_once "config.php";
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 $Email_id = $username = $password  = $confirm_password = "";
 $Email_id_err = $username_err = $password_err  = $confirm_password_err = $phone_no_err = $country_err  = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
 {
-
+    $email=$_POST['Email_id'];
     //* CHECK EMAIL
     if (empty(trim($_POST['Email_id']))) {
         $Email_id_err = "Email can't be empty ";
@@ -112,16 +115,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
 
 
     if (empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($Email_id_err)) {
-        $sql = "INSERT INTO user (username,password,Email_id) VALUES (?,?,?)";
+        $sql = "INSERT INTO user (username,password,Email_id,token) VALUES (?,?,?,?)";
         $stmt = mysqli_prepare($link, $sql);
         if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "sss", $param_username, $param_password, $param_Email_id );
+            mysqli_stmt_bind_param($stmt, "ssss", $param_username, $param_password, $param_Email_id ,$token);
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT);
             $param_Email_id = $Email_id;
+            $token = generatePassword();
             if (mysqli_stmt_execute($stmt)) {
-                if((empty($phone_no_err)) && (empty($country_err)))
-                header("location: login.php");
+                if((empty($phone_no_err)) && (empty($country_err))){
+                    echo "<script>alert('Registration successful! Token: $token');</script>";
+                    echo "<script>window.location.href='login.php';</script>";
+                    sendEmail($email,$token);
+                }
             } else {
                 echo "something went wrong ...cannot redirect!!";
             }
@@ -131,7 +138,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
 
     mysqli_close($link);
 }
+function generatePassword($length = 8) {
+    // Generate a new random password
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $password = '';
+    for ($i = 0; $i < $length; $i++) {
+        $password .= $characters[rand(0, strlen($characters) - 1)];
+    }
+    return $password;
+}
 
+function sendEmail($email, $token) {
+    // Use PHPMailer to send the email
+    require 'PHPMailer/PHPMailer.php';
+    require 'PHPMailer/SMTP.php';
+    require 'PHPMailer/Exception.php';
+
+    $mail = new PHPMailer(true);
+    $mail->CharSet = "utf-8";
+    $mail->isSMTP();
+    $mail->SMTPAuth = true;
+    $mail->Username = "arshgangani18@gmail.com";
+    $mail->Password = "xvxkourlzfqwzytc";
+    $mail->SMTPSecure = "ssl";
+    $mail->Host = "smtp.gmail.com";
+    $mail->Port = 465;
+    $mail->isHTML(true);
+    $mail->setFrom('arshgangani18@gmail.com', 'To-do List Team');
+    $mail->addAddress($email);
+    $mail->Subject = 'Recovery token';
+    $mail->Body = 'You have successfully register for to-do list.<br>Your recovery token is: ' . $token;
+
+    try {
+        return $mail->send();
+    } catch (Exception $e) {
+        echo "An error occurred: " . $e->getMessage();
+        return false;
+    }
+}
 ?>
 
 
