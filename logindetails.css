@@ -41,37 +41,33 @@
 	position: relative;
 }
 
-
 #chooseFile {
 	background-color: white;
 	color: black;
-	margin-bottom:5px;
+	margin-bottom: 5px;
 	margin-top: 5px;
 }
 
-
-
-#profile-image1{
+#profile-image1 {
 	height: 250px;
 	width: 200px;
 }
 
-#upload-button{
+#upload-button {
 	background-color: orange;
 	border-radius: 5px;
 }
 
-
 #chooseFile::-webkit-file-upload-button {
-	background-color:orange;
-	border-top-right-radius:5px;
+	background-color: orange;
+	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px; /* Set the desired background color */
 }
 
 .account-info {
 	margin-left: 350px;
-	margin-top: -400px;	
-	position:relative;
+	margin-top: -400px;
+	position: relative;
 	width: 350px;
 	height: 400px;
 	display: flex;

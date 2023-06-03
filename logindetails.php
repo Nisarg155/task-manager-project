@@ -1,7 +1,7 @@
 <?php
 
 session_start();
- include "upload.php";
+include "upload.php";
 $id = $_SESSION['id'];
 
 
@@ -23,6 +23,7 @@ if ($link) {
             $username = $data['username'];
             $email = $data['Email_id'];
             $password = $data['password'];
+            $userimage = $data['file_path'];
         } else {
             $error = "unable to bind parametre";
         }
@@ -37,83 +38,79 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-        if (empty(trim($_POST['username']))) {
-            $err1 = "USERNAME can't be empty ";
-            $err1_class = "bg-warning";
-        } elseif ($_POST['username'] === $username) {
-        } else {
-            $sql = "SELECT id FROM user WHERE username = ?";
-            $stmt = mysqli_prepare($link, $sql);
+    if (empty(trim($_POST['username']))) {
+        $err1 = "USERNAME can't be empty ";
+        $err1_class = "bg-warning";
+    } elseif ($_POST['username'] === $username) {
+    } else {
+        $sql = "SELECT id FROM user WHERE username = ?";
+        $stmt = mysqli_prepare($link, $sql);
 
-            if ($stmt) {
-                mysqli_stmt_bind_param($stmt, "s", $param_username);
-                $param_username = trim($_POST['username']);
-                if (mysqli_stmt_execute($stmt)) {
-                    mysqli_stmt_store_result($stmt);
-                    if (mysqli_stmt_num_rows($stmt) == 1) {
-                        $err1 = "username already exist!!!! ";
-                        $err1_class = "bg-warning";
-                    } else {
-                        $username = trim($_POST['username']);
-                    }
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, "s", $param_username);
+            $param_username = trim($_POST['username']);
+            if (mysqli_stmt_execute($stmt)) {
+                mysqli_stmt_store_result($stmt);
+                if (mysqli_stmt_num_rows($stmt) == 1) {
+                    $err1 = "username already exist!!!! ";
+                    $err1_class = "bg-warning";
                 } else {
-                    $error  = "unable to execute the query";
+                    $username = trim($_POST['username']);
                 }
             } else {
-                $error = "unable to prepare statment ";
+                $error  = "unable to execute the query";
             }
-        }
-        if (empty(trim($_POST['Email']))) {
-            $err2 = "Email can'T be empty ";
-            $err2_class = "bg-warning";
-        } elseif ($_POST['Email'] === $email) {
         } else {
-            $sql = "SELECT id FROM user WHERE Email_id = ?";
-            $stmt = mysqli_prepare($link, $sql);
+            $error = "unable to prepare statment ";
+        }
+    }
+    if (empty(trim($_POST['Email']))) {
+        $err2 = "Email can'T be empty ";
+        $err2_class = "bg-warning";
+    } elseif ($_POST['Email'] === $email) {
+    } else {
+        $sql = "SELECT id FROM user WHERE Email_id = ?";
+        $stmt = mysqli_prepare($link, $sql);
 
-            if ($stmt) {
-                mysqli_stmt_bind_param($stmt, "s", $param_email);
-                $param_email = $_POST['Email'];
-                if (mysqli_stmt_execute($stmt)) {
-                    mysqli_stmt_store_result($stmt);
-                    if (mysqli_stmt_num_rows($stmt) == 1) {
-                        $err2 = "Email already taken !!!!!";
-                        $err2_class = "bg-warning";
-                    } else {
-                        $email = $_POST['Email'];
-                    }
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, "s", $param_email);
+            $param_email = $_POST['Email'];
+            if (mysqli_stmt_execute($stmt)) {
+                mysqli_stmt_store_result($stmt);
+                if (mysqli_stmt_num_rows($stmt) == 1) {
+                    $err2 = "Email already taken !!!!!";
+                    $err2_class = "bg-warning";
                 } else {
+                    $email = $_POST['Email'];
+                }
+            } else {
+                $error = "unable to execute the query";
+            }
+        } else {
+            $error = "unable to prepare statement ";
+        }
+    }
+
+    if (empty($err1) && empty($err2)) {
+
+
+        $sql = "UPDATE user SET Email_id = ? ,  username = ?  WHERE id = ?";
+        $stmt = mysqli_prepare($link, $sql);
+
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, "ssi", $email, $username, $id);
+            if ($stmt) {
+                if (!mysqli_stmt_execute($stmt)) {
                     $error = "unable to execute the query";
-                }
-            } else {
-                $error = "unable to prepare statement ";
-            }
-        }
-
-        if (empty($err1) && empty($err2)) {
-
-
-            $sql = "UPDATE user SET Email_id = ? ,  username = ?  WHERE id = ?";
-            $stmt = mysqli_prepare($link, $sql);
-
-            if ($stmt) {
-                mysqli_stmt_bind_param($stmt, "ssi", $email, $username, $id);
-                if ($stmt) {
-                    if (!mysqli_stmt_execute($stmt)) {
-                        $error = "unable to execute the query";
-                    } else {
-                        $_SESSION['username'] = $username;
-                    }
                 } else {
-                    $error = "unable to bind parametre";
+                    $_SESSION['username'] = $username;
                 }
             } else {
-                $error = "unable to prepare the query";
+                $error = "unable to bind parametre";
             }
-
-            mysqli_stmt_close($stmt);
-            mysqli_close($link);
-        
+        } else {
+            $error = "unable to prepare the query";
+        }
     }
 }
 ?>
@@ -162,11 +159,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="account-details">
             <form action="" method="POST" enctype="multipart/form-data">
                 <div class="account-profile">
-                    <img src="images/profile.jpg" id="profile-image1">
-                    <img src="" id="profile-image2">
+                    <?php
+                    $default_image = "images/profile.jpg";
+                    if (!empty($userimage)) {
+                        echo '<img src="' . $userimage . '" id="profile-image1">';
+                    } else {
+                        echo '<img src = "' . $default_image . '" id = "profile-image1">';
+                    }
+                    ?>
+
                     <input type="file" name="fileUpload" id="chooseFile" class="info-profile" style="background-color: white; color:black;">
                     <small id="err4" class="<?php echo $err4_class ?? '' ?>"><?php echo $err4 ?? '' ?></small>
                     <button type="submit" name="submit" class="info-profile" id="upload-button">Upload File</button>
+                    
                 </div>
 
                 <div class="account-info">

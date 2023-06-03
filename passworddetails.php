@@ -147,10 +147,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
     <div class="container">
-        <div class="account-details">
-            <div class="account-profile">
-
-            </div>
             <form action="" method="POST">
 
                 <div class="account-info">
@@ -176,7 +172,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <a href="logindetails.php" id="update_profile">Update Profile</a>
                 </div>
             </form>
-        </div>
     </div>
 </body>
 

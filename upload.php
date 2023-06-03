@@ -1,4 +1,6 @@
 <?php
+
+$target_file = "";
 $id = $_SESSION['id'];
 $err4 = "";
 $err4_class = "";
