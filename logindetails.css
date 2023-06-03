@@ -20,25 +20,56 @@
 }
 
 .account-details {
-	width: 800px;
+	width: 700px;
 	height: 400px;
 	display: flex;
-	flex-wrap: wrap;
-    background-color: #1D267D;
-    border-radius: 50px;
+	background-color: #1d267d;
+	border-radius: 50px;
 }
 
 .account-profile {
-	background-color: black;
-	width: 250px;
-	height: 300px;
-	margin: 50px;
+	position: relative;
+	width: 350px;
+	height: 400px;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.info-profile {
+	position: relative;
+}
+
+#chooseFile {
+	background-color: white;
+	color: black;
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+#profile-image1 {
+	height: 250px;
+	width: 200px;
+}
+
+#upload-button {
+	background-color: orange;
+	border-radius: 5px;
+}
+
+#chooseFile::-webkit-file-upload-button {
+	background-color: orange;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px; /* Set the desired background color */
 }
 
 .account-info {
+	margin-left: 350px;
+	margin-top: -400px;
 	position: relative;
-	width: 450px;
-	height: 100%;
+	width: 350px;
+	height: 400px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -47,28 +78,25 @@
 
 #info-lable {
 	font-size: 22px;
-    margin-left: -150px;
+	margin-left: -150px;
 }
 
 .info_input {
 	width: 250px;
 	height: 30px;
-    border-radius: 5px;
-    border-spacing: 0px;
-    border-width: 1px solid black;
+	border-radius: 5px;
+	border-spacing: 0px;
+	border-width: 1px solid black;
 }
 
-
-#update_button{
+#update_button {
 	font-size: 18px;
 	border-radius: 5px;
-	color: white;
+	color: black;
 	background-color: orange;
-	
 }
 
-#update_password{
+#update_password {
 	color: white;
 	font-size: 18px;
 }
-
