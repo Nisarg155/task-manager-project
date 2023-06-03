@@ -158,13 +158,13 @@ function sendEmail($email, $token) {
     $mail->CharSet = "utf-8";
     $mail->isSMTP();
     $mail->SMTPAuth = true;
-    $mail->Username = "arshgangani18@gmail.com";
+    $mail->Username = "todolist218@gmail.com";
     $mail->Password = "password";
     $mail->SMTPSecure = "ssl";
     $mail->Host = "smtp.gmail.com";
     $mail->Port = 465;
     $mail->isHTML(true);
-    $mail->setFrom('arshgangani18@gmail.com', 'To-do List Team');
+    $mail->setFrom('todolist218@gmail.com', 'To-do List Team');
     $mail->addAddress($email);
     $mail->Subject = 'Recovery token';
     $mail->Body = 'You have successfully register for to-do list.<br>Your recovery token is: ' . $token;

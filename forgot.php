@@ -1,6 +1,10 @@
 <?php
 
 session_start();
+if($_SERVER['REQUEST_METHOD'] === 'POST')
+{
+
+
 
 // Retrieve the user's ID from the session
 $username = $_POST['username'];
@@ -18,7 +22,7 @@ if (!$link) {
     $error = "Unable to connect to the database.";
 } else {
     // Prepare and execute SELECT query to retrieve user data
-    $sql = "SELECT * FROM user WHERE username = ?";
+    $sql = "SELECT token,password FROM user WHERE username = ?";
     $stmt = mysqli_prepare($link, $sql);
     
     if ($stmt) {
@@ -105,6 +109,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             mysqli_close($link);
         }
     }
+}
+
 }
 ?>
 
