@@ -47,7 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')    //todo CHECK THE USERNAME
     if (empty(trim($_POST['username']))) {
         $username_err = "Username can't be blank";
         $username_class = "bg-warning";
-    } else {
+    }elseif(strlen($_POST['username']) > 25)
+    {
+        $username_err  = "Username Can't be so long";
+        $username_class = "bg-warning";
+    } 
+    else {
         $sql = "SELECT id FROM user WHERE username = ?";
         $stmt = mysqli_prepare($link, $sql);
 

@@ -38,11 +38,13 @@ if ($link) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
-
     if (empty(trim($_POST['username']))) {
         $err1 = "USERNAME can't be empty ";
         $err1_class = "bg-warning";
     } elseif ($_POST['username'] === $username) {
+    } elseif (strlen($_POST['username']) > 20) {
+        $err1 = "Username Can't be so long";
+        $err1_class = "bg-warning";
     } else {
         $sql = "SELECT id FROM user WHERE username = ?";
         $stmt = mysqli_prepare($link, $sql);
@@ -173,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <small id="err4" class="<?php echo $err4_class ?? '' ?>"><?php echo $err4 ?? '' ?></small>
                     <button type="submit" name="upload_button1" class="info-profile" id="upload-button">Upload File</button>
                     <button type="submit" name="remove_button" class="info_profile" id="remove_button">Remove</button>
-                    
+
                 </div>
 
                 <div class="account-info">
