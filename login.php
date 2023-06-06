@@ -60,9 +60,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             header('location: welcome.php');
                         } else {
                             $err2 = "Password doesn't match";
-                            $err2_class = "bg-warning"; // Add this line
+                            $err2_class = "bg-warning"; 
                         }
                     }
+                } else {
+                    $err1 = "Username not found"; 
+                    $err1_class = "bg-warning"; 
                 }
             }
         }
