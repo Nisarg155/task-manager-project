@@ -24,6 +24,7 @@ if ($link) {
             $email = $data['Email_id'];
             $password = $data['password'];
             $userimage = $data['file_path'];
+            $_SESSION['userimage'] = $userimage;
         } else {
             $error = "unable to bind parametre";
         }
@@ -170,7 +171,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <input type="file" name="fileUpload" id="chooseFile" class="info-profile" style="background-color: white; color:black;">
                     <small id="err4" class="<?php echo $err4_class ?? '' ?>"><?php echo $err4 ?? '' ?></small>
-                    <button type="submit" name="submit" class="info-profile" id="upload-button">Upload File</button>
+                    <button type="submit" name="upload_button1" class="info-profile" id="upload-button">Upload File</button>
+                    <button type="submit" name="remove_button" class="info_profile" id="remove_button">Remove</button>
                     
                 </div>
 
@@ -182,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <lable id="info-lable" for="Email">Email Id</lable>
                     <input id="Email" name="Email" type="email" class="info_input" value="<?php echo $email ?>">
                     <small id="err2" class="<?php echo $err2_class ?? '' ?>"><?php echo $err2 ?? '' ?></small><br>
-                    <button id="update_button" class="update_button">Update</button>
+                    <button id="update_button" class="update_button" name="upload_button2">Update</button>
                     <br>
                     <a href="passworddetails.php" id="update_password">Update password</a>
                 </div>

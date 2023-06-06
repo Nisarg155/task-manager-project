@@ -58,6 +58,11 @@
 	border-radius: 5px;
 }
 
+#remove_button{
+	background-color: orange;
+	border-radius: 5px;
+}
+
 #chooseFile::-webkit-file-upload-button {
 	background-color: orange;
 	border-top-right-radius: 5px;
